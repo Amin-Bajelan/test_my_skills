@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from accounts.models import User, Profile
 
+
 #Create your models here.
 
 class Post(models.Model):
