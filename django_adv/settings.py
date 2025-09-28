@@ -130,3 +130,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # after login redirect to where
 LOGIN_REDIRECT_URL = '/blog/list_post/'
+
+# setup for rest framework permission
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

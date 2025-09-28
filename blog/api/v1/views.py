@@ -1,8 +1,10 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from blog.models import Post
 from .serializers import PostSerializer
 from rest_framework.exceptions import status
+
 
 from django.shortcuts import get_object_or_404
 
@@ -20,14 +22,23 @@ def post_list(request):
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view()
+@api_view(['GET', 'PUT', 'DELETE'])
 def post_detail(request, pk):
     my_post = get_object_or_404(Post, pk=pk)
-    my_data = PostSerializer(my_post)
-    return Response(my_data.data)
+    if request.method == 'GET':
+        my_data = PostSerializer(my_post)
+        return Response(my_data.data)
+    elif request.method == 'PUT':
+        serializer = PostSerializer(my_post,data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    elif request.method == 'DELETE':
+        my_post.delete()
+        return Response({'message':'item delete successfully'},status=status.HTTP_204_NO_CONTENT)
+
