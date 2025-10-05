@@ -7,6 +7,6 @@ Faker~=37.4.0
 djangorestframework
 markdown
 django-filter
-django-filter
 #documentaion for api
 drf_yasg
+djangorestframework-simplejwt
